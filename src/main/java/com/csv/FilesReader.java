@@ -3,52 +3,47 @@ package com.csv;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
+import org.json.JSONObject;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.*;
 
 
 public class FilesReader {
 
-    private static final String SAMPLE_CSV_FILE_PATH = "C:\\Marek\\1zadanie\\file1\\country.csv";
-
     public static void main(String[] args) throws IOException {
 
         FileList fileList = new FileList();
+        Map<String,Object> columns = new TreeMap<String,Object>();
 
-        // fileList.toString();
-        // Reader reader;
-        // CSVParser csvParser;
-
-        fileList.getFileList().stream().forEach(SAMPLE_CSV_FILE_PATH -> {
-            CSVParser csvParser;
-            Reader reader = null;
+        fileList.getFileList().stream().forEach(file -> {
             try {
-                reader = Files.newBufferedReader(Paths.get(SAMPLE_CSV_FILE_PATH));
-                csvParser = new CSVParser(reader, CSVFormat.DEFAULT);
+                BufferedReader br = new BufferedReader(new FileReader(file));
+                String line;
 
+                if ((line = br.readLine()) != null) {
+                    List<String> columnsName = Arrays.asList((line.split(",")));
 
-                for (CSVRecord csvRecord : csvParser) {
-                    // Accessing Values by Column Index
-                    String name = csvRecord.get(0);
-                    String email = csvRecord.get(1);
-                    String phone = csvRecord.get(2);
-                    String country = csvRecord.get(3);
-
-                    System.out.println("Record No - " + csvRecord.getRecordNumber());
-                    System.out.println("---------------");
-                    System.out.println("Name : " + name);
-                    System.out.println("Email : " + email);
-                    System.out.println("Phone : " + phone);
-                    System.out.println("Country : " + country);
-                    System.out.println("---------------\n\n");
+                    while ((line = br.readLine()) != null) {
+                        List<String> values = Arrays.asList((line.split(",")));
+                        for (int i=0; i<columnsName.size(); i++){
+                            columns.put(columnsName.get(i), FindType.findType(values.get(i)));
+                        }
+                        JSONObject json = new JSONObject(columns);
+                        System.out.println(json);
+                    }
                 }
+
             } catch (IOException e) {
                 e.printStackTrace();
             }
         });
+        System.out.println();
     }
 
 }

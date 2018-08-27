@@ -5,27 +5,24 @@ import java.io.IOException;
 
 public class FindType {
 
-    private static final String variable = "4313456346435642.342";
+    // private static final String variable = "4313456346435642.342";
 
-    public static void main(String[] args) throws IOException {
+    public static Object findType(String variable) throws IOException {
         if (variable.toLowerCase().equals("false") || variable.toLowerCase().equals("true")) {
-            System.out.println("bool");
+            return Boolean.parseBoolean(variable);
         }
 
         try {
-            if(!Float.isInfinite(Float.parseFloat(variable)))
-                System.out.println("float");
-        } catch (NumberFormatException e){
+            if (!Float.isInfinite(Float.parseFloat(variable)))
+                return Float.parseFloat(variable);
+        } catch (NumberFormatException e) {
 
         }
         try {
             Double.parseDouble(variable);
-            System.out.println("double");
-        } catch (NumberFormatException e){
-
+            return Double.parseDouble(variable);
+        } catch (NumberFormatException e) {
+            return variable;
         }
-        System.out.println("String");
-
-
     }
 }
