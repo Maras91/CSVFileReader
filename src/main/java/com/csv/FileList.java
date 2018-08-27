@@ -6,7 +6,7 @@ import java.util.Scanner;
 import java.util.ArrayList;
 
 public class FileList {
-    ArrayList<String> fileList;
+    private  ArrayList<String> fileList;
 
     public FileList() {
         fileList = new ArrayList<String>();
@@ -19,8 +19,11 @@ public class FileList {
         }
 
         while (sc.hasNextLine()) {
-            //System.out.println(sc.nextLine());
+         //   System.out.println(sc.nextLine());
             fileList.add(sc.nextLine());
         }
+    }
+    public ArrayList<String> getFileList(){
+        return this.fileList;
     }
 }
