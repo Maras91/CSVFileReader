@@ -20,8 +20,7 @@ public class RabbitMQProducer {
         try {
             ConnectionFactory factory = new ConnectionFactory();
             factory.setHost(Properties.rabbitMQHost);
-            Connection connection = null;
-            connection = factory.newConnection();
+            Connection connection = factory.newConnection();
             Channel channel = connection.createChannel();
 
             channel.queueDeclare(QUEUE_NAME, false, false, false, null);
