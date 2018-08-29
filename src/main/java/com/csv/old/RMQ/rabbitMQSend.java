@@ -1,4 +1,4 @@
-package com.csv;
+package com.csv.old.RMQ;
 
 import com.rabbitmq.client.ConnectionFactory;
 import com.rabbitmq.client.Connection;
@@ -20,7 +20,7 @@ public class rabbitMQSend {
             Channel channel = connection.createChannel();
 
             channel.queueDeclare(QUEUE_NAME, false, false, false, null);
-            String message = "Hello World!";
+            String message = "Ble ble ble";
             channel.basicPublish("", QUEUE_NAME, null, message.getBytes());
             System.out.println(" [x] Sent '" + message + "'");
 

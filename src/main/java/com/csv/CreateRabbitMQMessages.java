@@ -1,38 +1,55 @@
 package com.csv;
 
+import com.csv.old.FileList;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.*;
 
+public class CreateRabbitMQMessages {
 
-public class FilesReader {
+    private ArrayList<ArrayList<JSONObject>> outputMessages;
 
-    private List<ArrayList<JSONObject>> outputMessages;
 
-    public FilesReader(int messageSize) throws IOException {
+    public CreateRabbitMQMessages() {
+        CreateListOfFile fileList = new CreateListOfFile();
+        try {
+            outputMessages = new ArrayList<ArrayList<JSONObject>>();
+            outputMessages.addAll(FilesReader(Properties.rabbitMQMesageSize,fileList.getFileList()));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public List<ArrayList<JSONObject>> FilesReader(int messageSize , ArrayList<File> fileList) throws IOException {
         ArrayList<JSONObject> jsonList = new ArrayList<JSONObject>();
         outputMessages =  new ArrayList<ArrayList<JSONObject>>();
-                FileList fileList = new FileList();
         Map<String,Object> columns = new TreeMap<String,Object>();
+        String separator;
+        if (Properties.extension==Extension.csv) {
+            separator=",";
+        } else {
+            separator=" ";
+        }
 
-        fileList.getFileList().forEach(file -> {
+        fileList.forEach(file -> {
             try {
                 BufferedReader br = new BufferedReader(new FileReader(file));
                 String line;
 
                 if ((line = br.readLine()) != null) {
-                    List<String> columnsName = Arrays.asList((line.split(",")));
+                    List<String> columnsName = Arrays.asList((line.split(separator)));
                     int countOfMessageLines=0;
                     while ((line = br.readLine()) != null) {
-                        List<String> values = Arrays.asList((line.split(",")));
+                        List<String> values = Arrays.asList((line.split(separator)));
                         for (int i=0; i<columnsName.size(); i++){
                             columns.put(columnsName.get(i), FindType.findType(values.get(i)));
                         }
                         JSONObject json = new JSONObject(columns);
-                        System.out.println(json);
+                     //   System.out.println(json);
                         jsonList.add(json);
                         countOfMessageLines++;
                         if (countOfMessageLines>=messageSize) {
@@ -51,9 +68,9 @@ public class FilesReader {
                 e.printStackTrace();
             }
         });
+        return outputMessages;
     }
-    public List<ArrayList<JSONObject>> getOutputMessages(){
-        return this.outputMessages;
+    public ArrayList<ArrayList<JSONObject>> getOutputMessages() {
+        return outputMessages;
     }
-
 }

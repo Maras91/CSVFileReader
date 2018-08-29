@@ -1,0 +1,3 @@
+C:\Users\A701378\IdeaProjects\CSVFileReader\src\main\resources\zadanie\1zadanie\1
+C:\Users\A701378\IdeaProjects\CSVFileReader\src\main\resources\zadanie\1zadanie\2
+C:\Users\A701378\IdeaProjects\CSVFileReader\src\main\resources\zadanie\1zadanie\3
