@@ -1,7 +1,9 @@
-package com.csv;
+package com.csv.rabitMQhello;
 
 import java.util.concurrent.TimeUnit;
 
+import com.csv.rabitMQhello.Application;
+import com.csv.rabitMQhello.Receiver;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;

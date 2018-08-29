@@ -1,20 +1,30 @@
 package com.csv;
 
-import java.util.concurrent.CountDownLatch;
-import org.springframework.stereotype.Component;
+import com.rabbitmq.client.*;
+import org.springframework.boot.CommandLineRunner;
 
-@Component
-public class Receiver {
+import java.io.IOException;
 
-    private CountDownLatch latch = new CountDownLatch(1);
+public class Receiver  implements CommandLineRunner  {
 
-    public void receiveMessage(String message) {
-        System.out.println("Received <" + message + ">");
-        latch.countDown();
+    private final static String QUEUE_NAME = "hello";
+    @Override
+    public void run(String... args) throws Exception {
+        ConnectionFactory factory = new ConnectionFactory();
+        factory.setHost("localhost");
+        Connection connection = factory.newConnection();
+        Channel channel = connection.createChannel();
+
+        channel.queueDeclare(QUEUE_NAME, false, false, false, null);
+        System.out.println(" [*] Waiting for messages.");
+
+        Consumer consumer = new DefaultConsumer(channel) {
+            @Override
+            public void handleDelivery(String consumerTag, Envelope envelope, AMQP.BasicProperties properties, byte[] body) throws IOException {
+                String message = new String(body, "UTF-8");
+                System.out.println(" [x] Received '" + message + "'");
+            }
+        };
+        channel.basicConsume(QUEUE_NAME, true, consumer);
     }
-
-    public CountDownLatch getLatch() {
-        return latch;
-    }
-
 }

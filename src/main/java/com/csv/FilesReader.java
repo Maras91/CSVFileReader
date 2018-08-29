@@ -1,34 +1,31 @@
 package com.csv;
 
-import org.apache.commons.csv.CSVFormat;
-import org.apache.commons.csv.CSVParser;
-import org.apache.commons.csv.CSVRecord;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.Reader;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.*;
 
 
 public class FilesReader {
 
-    public static void main(String[] args) throws IOException {
+    private List<ArrayList<JSONObject>> outputMessages;
 
-        FileList fileList = new FileList();
+    public FilesReader(int messageSize) throws IOException {
+        ArrayList<JSONObject> jsonList = new ArrayList<JSONObject>();
+        outputMessages =  new ArrayList<ArrayList<JSONObject>>();
+                FileList fileList = new FileList();
         Map<String,Object> columns = new TreeMap<String,Object>();
 
-        fileList.getFileList().stream().forEach(file -> {
+        fileList.getFileList().forEach(file -> {
             try {
                 BufferedReader br = new BufferedReader(new FileReader(file));
                 String line;
 
                 if ((line = br.readLine()) != null) {
                     List<String> columnsName = Arrays.asList((line.split(",")));
-
+                    int countOfMessageLines=0;
                     while ((line = br.readLine()) != null) {
                         List<String> values = Arrays.asList((line.split(",")));
                         for (int i=0; i<columnsName.size(); i++){
@@ -36,6 +33,17 @@ public class FilesReader {
                         }
                         JSONObject json = new JSONObject(columns);
                         System.out.println(json);
+                        jsonList.add(json);
+                        countOfMessageLines++;
+                        if (countOfMessageLines>=messageSize) {
+                            countOfMessageLines=0;
+                            outputMessages.add(new ArrayList<JSONObject>(jsonList));
+                            jsonList.clear();
+                        }
+                    }
+                    if (!jsonList.isEmpty()){
+                        outputMessages.add(new ArrayList<JSONObject>(jsonList));
+                        jsonList.clear();
                     }
                 }
 
@@ -43,7 +51,9 @@ public class FilesReader {
                 e.printStackTrace();
             }
         });
-        System.out.println();
+    }
+    public List<ArrayList<JSONObject>> getOutputMessages(){
+        return this.outputMessages;
     }
 
 }

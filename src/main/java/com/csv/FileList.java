@@ -6,11 +6,12 @@ import java.util.Scanner;
 import java.util.ArrayList;
 
 public class FileList {
+    private static final String FilesPathName = "C:\\Marek\\1zadanie\\pliki.txt";
     private  ArrayList<String> fileList;
 
     public FileList() {
         fileList = new ArrayList<String>();
-        File file = new File("C:\\Marek\\1zadanie\\pliki.txt");
+        File file = new File(FilesPathName);
         Scanner sc = null;
         try {
             sc = new Scanner(file);
@@ -19,7 +20,6 @@ public class FileList {
         }
 
         while (sc.hasNextLine()) {
-         //   System.out.println(sc.nextLine());
             fileList.add(sc.nextLine());
         }
     }

@@ -1,4 +1,4 @@
-package com.csv;
+package com.csv.rabitMQhello;
 
 import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.core.BindingBuilder;
