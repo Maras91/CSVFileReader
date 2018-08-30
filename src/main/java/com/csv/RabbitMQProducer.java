@@ -3,18 +3,16 @@ package com.csv;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
-import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.concurrent.TimeoutException;
 
 public class RabbitMQProducer {
 
-    private final static String QUEUE_NAME = "hello";
+    static final public String EXCHANGE_NAME = "message";
 
     public static void main(String[] argv) throws java.io.IOException {
 
-        CreateRabbitMQMessages messages = new CreateRabbitMQMessages();
+        convertFileToRabbitMQMessages messages = new convertFileToRabbitMQMessages();
 
         System.out.println();
         try {
@@ -23,13 +21,14 @@ public class RabbitMQProducer {
             Connection connection = factory.newConnection();
             Channel channel = connection.createChannel();
 
-            channel.queueDeclare(QUEUE_NAME, false, false, false, null);
+            channel.exchangeDeclare(EXCHANGE_NAME, "direct");
 
-            for (ArrayList<JSONObject> message :messages.getOutputMessages()) {
 
-                channel.basicPublish("", QUEUE_NAME, null, message.toString().getBytes() );
-                System.out.println(" [x] Sent '" + message + "'");
+            for (Message message : messages.getOutputMessages()) {
+                channel.basicPublish(EXCHANGE_NAME, message.getId(), null, message.getData().toString().getBytes());
+                System.out.println(" [x] Sent '" + message.getId() + "':'" + message.getData() + "'");
             }
+
             channel.close();
             connection.close();
         } catch (TimeoutException e) {

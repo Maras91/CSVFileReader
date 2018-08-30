@@ -1,20 +1,18 @@
 package com.csv;
 
 import org.json.JSONObject;
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.*;
-import org.json.JSONObject;
 
-public class CreateRabbitMQMessages {
+public class convertFileToRabbitMQMessages {
 
-    private ArrayList<ArrayList<JSONObject>> outputMessages;
+    private ArrayList<Message> outputMessages;
 
 
-    public CreateRabbitMQMessages() {
+    public convertFileToRabbitMQMessages() {
         CreateListOfFile fileList = new CreateListOfFile();
         try {
             outputMessages = new ArrayList<>();
@@ -24,7 +22,7 @@ public class CreateRabbitMQMessages {
         }
     }
 
-    public List<ArrayList<JSONObject>> FilesReader(int messageSize , ArrayList<File> fileList) throws IOException {
+    public List<Message> FilesReader(int messageSize , ArrayList<File> fileList) throws IOException {
         ArrayList<JSONObject> jsonList = new ArrayList<>();
         outputMessages = new ArrayList<>();
         Map<String,Object> columns = new TreeMap<>();
@@ -54,12 +52,12 @@ public class CreateRabbitMQMessages {
                         countOfMessageLines++;
                         if (countOfMessageLines>=messageSize) {
                             countOfMessageLines=0;
-                            outputMessages.add(new ArrayList<>(jsonList));
+                            outputMessages.add(new Message(file.getName(),jsonList));
                             jsonList.clear();
                         }
                     }
                     if (!jsonList.isEmpty()){
-                        outputMessages.add(new ArrayList<>(jsonList));
+                        outputMessages.add(new Message(file.getName(),jsonList));
                         jsonList.clear();
                     }
                 }
@@ -70,7 +68,7 @@ public class CreateRabbitMQMessages {
         });
         return outputMessages;
     }
-    public ArrayList<ArrayList<JSONObject>> getOutputMessages() {
+    public ArrayList<Message> getOutputMessages() {
         return outputMessages;
     }
 }
