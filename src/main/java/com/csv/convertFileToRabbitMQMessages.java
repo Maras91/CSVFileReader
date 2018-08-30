@@ -16,7 +16,7 @@ public class convertFileToRabbitMQMessages {
         CreateListOfFile fileList = new CreateListOfFile();
         try {
             outputMessages = new ArrayList<>();
-            outputMessages.addAll(FilesReader(Properties.rabbitMQMesageSize,fileList.getFileList()));
+            outputMessages.addAll(FilesReader(Properties.rabbitMQMessageSize,fileList.getFileList()));
         } catch (IOException e) {
             e.printStackTrace();
         }

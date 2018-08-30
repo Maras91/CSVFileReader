@@ -8,7 +8,7 @@ import java.util.concurrent.TimeoutException;
 
 public class RabbitMQProducer {
 
-    static final public String EXCHANGE_NAME = "message";
+
 
     public static void main(String[] argv) throws java.io.IOException {
 
@@ -21,11 +21,11 @@ public class RabbitMQProducer {
             Connection connection = factory.newConnection();
             Channel channel = connection.createChannel();
 
-            channel.exchangeDeclare(EXCHANGE_NAME, "direct");
+            channel.exchangeDeclare(Properties.EXCHANGE_NAME, "direct");
 
 
             for (Message message : messages.getOutputMessages()) {
-                channel.basicPublish(EXCHANGE_NAME, message.getId(), null, message.getData().toString().getBytes());
+                channel.basicPublish(Properties.EXCHANGE_NAME, message.getId(), null, message.getData().toString().getBytes());
                 System.out.println(" [x] Sent '" + message.getId() + "':'" + message.getData() + "'");
             }
 
