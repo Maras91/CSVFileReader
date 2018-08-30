@@ -14,11 +14,11 @@ public class CreateListOfFile {
     private ArrayList<File> fileList;
 
     public CreateListOfFile(){
-        fileList = new ArrayList<File>();
+        fileList = new ArrayList<>();
         fileList.addAll(folderListToFileList(listOfFolders()));
     }
     public ArrayList<String> listOfFolders() {
-        ArrayList<String> folderList = new ArrayList<String>();
+        ArrayList<String> folderList = new ArrayList<>();
         File file = new File(Properties.fileWithListOfScanDirectories);
         Scanner sc = null;
         try {
@@ -33,9 +33,9 @@ public class CreateListOfFile {
         return folderList;
     }
     public ArrayList<File> folderListToFileList(ArrayList<String> listOfFolders) {
-        ArrayList<File> fileList = new ArrayList<File>();
+        ArrayList<File> fileList = new ArrayList<>();
         listOfFolders.forEach(directory ->
-                fileList.addAll(FileUtils.listFiles(new File(directory), new SuffixFileFilter("csv"), TrueFileFilter.INSTANCE))
+                fileList.addAll(FileUtils.listFiles(new File(directory), new SuffixFileFilter(Properties.extension.toString()), TrueFileFilter.INSTANCE))
         );
         return fileList;
     }

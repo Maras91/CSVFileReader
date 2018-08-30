@@ -1,6 +1,5 @@
 package com.csv;
 
-import com.csv.old.FileList;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
@@ -8,6 +7,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.*;
+import org.json.JSONObject;
 
 public class CreateRabbitMQMessages {
 
@@ -17,7 +17,7 @@ public class CreateRabbitMQMessages {
     public CreateRabbitMQMessages() {
         CreateListOfFile fileList = new CreateListOfFile();
         try {
-            outputMessages = new ArrayList<ArrayList<JSONObject>>();
+            outputMessages = new ArrayList<>();
             outputMessages.addAll(FilesReader(Properties.rabbitMQMesageSize,fileList.getFileList()));
         } catch (IOException e) {
             e.printStackTrace();
@@ -25,14 +25,14 @@ public class CreateRabbitMQMessages {
     }
 
     public List<ArrayList<JSONObject>> FilesReader(int messageSize , ArrayList<File> fileList) throws IOException {
-        ArrayList<JSONObject> jsonList = new ArrayList<JSONObject>();
-        outputMessages =  new ArrayList<ArrayList<JSONObject>>();
-        Map<String,Object> columns = new TreeMap<String,Object>();
+        ArrayList<JSONObject> jsonList = new ArrayList<>();
+        outputMessages = new ArrayList<>();
+        Map<String,Object> columns = new TreeMap<>();
         String separator;
         if (Properties.extension==Extension.csv) {
             separator=",";
         } else {
-            separator=" ";
+            separator="\\s+";
         }
 
         fileList.forEach(file -> {
@@ -54,12 +54,12 @@ public class CreateRabbitMQMessages {
                         countOfMessageLines++;
                         if (countOfMessageLines>=messageSize) {
                             countOfMessageLines=0;
-                            outputMessages.add(new ArrayList<JSONObject>(jsonList));
+                            outputMessages.add(new ArrayList<>(jsonList));
                             jsonList.clear();
                         }
                     }
                     if (!jsonList.isEmpty()){
-                        outputMessages.add(new ArrayList<JSONObject>(jsonList));
+                        outputMessages.add(new ArrayList<>(jsonList));
                         jsonList.clear();
                     }
                 }
