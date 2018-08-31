@@ -5,8 +5,6 @@ import java.io.IOException;
 
 public class FindType {
 
-    // private static final String variable = "4313456346435642.342";
-
     public static Object findType(String variable) throws IOException {
         if (variable.toLowerCase().equals("false") || variable.toLowerCase().equals("true")) {
             return Boolean.parseBoolean(variable);

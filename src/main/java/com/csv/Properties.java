@@ -6,4 +6,5 @@ public class Properties {
     public final static Extension extension = Extension.tsv;
     public final static String rabbitMQHost = "localhost";
     public final static String EXCHANGE_NAME = "message";
+    public final static Integer scanningFrequencyInSeconds = 10;
 }
