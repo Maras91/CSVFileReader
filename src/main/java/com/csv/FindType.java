@@ -4,8 +4,9 @@ import java.io.IOException;
 
 
 public class FindType {
-
-    public static Object findType(String variable) throws IOException {
+    //dla wszystkich kolumn
+    //int float duble bool string
+    public static Object findType(String variable)  {
         if (variable.toLowerCase().equals("false") || variable.toLowerCase().equals("true")) {
             return Boolean.parseBoolean(variable);
         }
