@@ -6,6 +6,9 @@ import org.apache.commons.io.filefilter.TrueFileFilter;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -16,19 +19,14 @@ public class CreateListOfFile {
     public CreateListOfFile(){
         fileList = new ArrayList<>();
         fileList.addAll(folderListToFileList(listOfFolders()));
+        System.out.println();
     }
     public ArrayList<String> listOfFolders() {
         ArrayList<String> folderList = new ArrayList<>();
-        File file = new File(Properties.fileWithListOfScanDirectories);
-        Scanner sc = null;
         try {
-            sc = new Scanner(file);
-        } catch (FileNotFoundException e) {
+            Files.lines(Paths.get(Properties.fileWithListOfScanDirectories)).forEach(line -> folderList.add(line));
+        } catch (IOException e) {
             e.printStackTrace();
-        }
-
-        while (sc.hasNextLine()) {
-            folderList.add(sc.nextLine());
         }
         return folderList;
     }

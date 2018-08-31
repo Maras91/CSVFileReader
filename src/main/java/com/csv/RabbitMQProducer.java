@@ -30,28 +30,22 @@ public class RabbitMQProducer {
                 channel.basicPublish("", message.getId(), null, message.getData().toString().getBytes());
                 System.out.println(" [x] Sent '" + message.getId() + "':'" + message.getData() + "'");
             }
-            changeNameFileToComplete(new CreateListOfFile().getFileList());
             channel.close();
             connection.close();
+//            changeNameFileToComplete(new CreateListOfFile().getFileList());
         } catch (TimeoutException e) {
             e.printStackTrace();
         }
 
     }
-    private static void changeNameFileToComplete(ArrayList<File> files) {
-        files.forEach(oldFile -> {
-            File newFile = new File(oldFile.getParent(), oldFile.getName()+".complete");
-            try {
-                Files.move(oldFile.toPath(), newFile.toPath());
-            } catch (IOException e) {
-                try {
-                    Thread.sleep(5000);
-                    System.out.println("IOException");
-                    changeNameFileToComplete(files);
-                } catch (InterruptedException e1) {
-                    e1.printStackTrace();
-                }
-            }
-        });
-    }
+//    private static void changeNameFileToComplete(ArrayList<File> files) {
+//        files.forEach(oldFile -> {
+//            File newFile = new File(oldFile.getParent(), oldFile.getName()+".complete");
+//            try {
+//                Files.move(oldFile.toPath(), newFile.toPath());
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
+//        });
+//    }
 }

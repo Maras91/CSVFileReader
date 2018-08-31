@@ -63,15 +63,27 @@ public class ConvertFileToRabbitMQMessages {
                         jsonList.clear();
                     }
                 }
-
+                br.close();
             } catch (IOException e) {
                 e.printStackTrace();
             }
         });
+        changeNameFileToComplete(fileList);
         return outputMessages;
     }
 
     public ArrayList<Message> getOutputMessages() {
         return outputMessages;
+    }
+
+    private static void changeNameFileToComplete(ArrayList<File> files) {
+        files.forEach(oldFile -> {
+            File newFile = new File(oldFile.getParent(), oldFile.getName() + ".complete");
+            try {
+                Files.move(oldFile.toPath(), newFile.toPath());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
     }
 }
