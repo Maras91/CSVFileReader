@@ -13,7 +13,7 @@ public class RabbitMQPackage {
     RabbitMQPackage() throws IOException {
         DataTypConverter dataTypConverter = new DataTypConverter();
         jsonList = new ArrayList<>();
-        dataTypConverter.getListOfLines().forEach(line -> {
+        dataTypConverter.getListOfFiles().forEach(line -> {
             JSONObject json = new JSONObject(line);
             jsonList.add(json);
         });

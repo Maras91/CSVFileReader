@@ -16,11 +16,6 @@ public class FileList {
         fileList = Files.walk(Paths.get(Properties.fileWithListOfScanDirectories))
                 .filter(p -> p.toString().endsWith("."+Properties.extension.toString())).collect(Collectors.toList());
 
-
-//            Files.list(Paths.get(Properties.fileWithListOfScanDirectories))
-//             //       .filter(Files::isRegularFile)
-//                    .forEach(System.out::println);
-
     }
 //    public FileList(){
 //        fileList = folderListToFileList(listOfFolders());
@@ -34,11 +29,11 @@ public class FileList {
 //        }
 //        return folderList;
 //    }
-//    public ArrayList<File> folderListToFileList(ArrayList<String> listOfFolders) {
-//        //ArrayList<String> listOfFolders -> ArrayList<File>
-//        ArrayList<File> fileList = new ArrayList<>();
+//    public ArrayList<ReadFile> folderListToFileList(ArrayList<String> listOfFolders) {
+//        //ArrayList<String> listOfFolders -> ArrayList<ReadFile>
+//        ArrayList<ReadFile> fileList = new ArrayList<>();
 //        listOfFolders.forEach(directory ->
-//                fileList.addAll(FileUtils.listFiles(new File(directory), new SuffixFileFilter(Properties.extension.toString()), TrueFileFilter.INSTANCE))
+//                fileList.addAll(FileUtils.listFiles(new ReadFile(directory), new SuffixFileFilter(Properties.extension.toString()), TrueFileFilter.INSTANCE))
 //        );
 //        return fileList;
 //    }

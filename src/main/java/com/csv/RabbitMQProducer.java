@@ -14,17 +14,19 @@ public class RabbitMQProducer {
     public static void startScanning() throws java.io.IOException {
 
      //   FileToRabbitMQMessagesConverter messages = new FileToRabbitMQMessagesConverter();
-        RabbitMQPackage messages= new RabbitMQPackage();
+        DataTypConverter listOfFiles= new DataTypConverter();
         try {
             ConnectionFactory factory = new ConnectionFactory();
             factory.setHost(Properties.rabbitMQHost);
             Connection connection = factory.newConnection();
             Channel channel = connection.createChannel();
 
-            for (JSONObject message : messages.getJsonList()) {
-                channel.queueDeclare("ddd.tsv",false,false,false,null);
-                channel.basicPublish("", "ddd.tsv", null, message.toString().getBytes());
-                System.out.println(" [x] Sent '" + "ddd.tsv" + "':'" + message + "'");
+            for (ReadFile file : listOfFiles.getListOfFiles()) {
+                for (Row row:file.getData()) {
+                    channel.queueDeclare(file.getId(), false, false, false, null);
+                    channel.basicPublish("", file.getId(), null, row.getFields().toString().getBytes());
+                    System.out.println(" [x] Sent '" + file.getId() + "':'" + row.getFields().toString() + "'");
+                }
             }
             channel.close();
             connection.close();

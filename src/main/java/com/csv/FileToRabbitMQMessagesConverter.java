@@ -7,7 +7,7 @@ import java.util.*;
 
 public class FileToRabbitMQMessagesConverter {
 
-    private ArrayList<RMQPackage> outputMessages;
+//    private ArrayList<RMQPackage> outputMessages;
 
 
     public FileToRabbitMQMessagesConverter() {
@@ -24,7 +24,7 @@ public class FileToRabbitMQMessagesConverter {
 //    // 1 zwracanie prwidlowych typów dla tabeli
 //    // 2 kowersja na JSONy
 //    // 3 dzielenie na pakiety do rabbitMQ
-//    public List<RMQPackage> FilesReader(int messageSize, ArrayList<File> fileList) {
+//    public List<RMQPackage> FilesReader(int messageSize, ArrayList<ReadFile> fileList) {
 //        ArrayList<JSONObject> jsonList = new ArrayList<>();
 //        outputMessages = new ArrayList<>();
 //        Map<String, Object> columns = new TreeMap<>();
@@ -70,9 +70,9 @@ public class FileToRabbitMQMessagesConverter {
 //        return outputMessages;
     }
 
-    public ArrayList<RMQPackage> getOutputMessages() {
-        return outputMessages;
-    }
+//    public ArrayList<RMQPackage> getOutputMessages() {
+//        return outputMessages;
+//    }
 
     private static void changeNameFileToComplete(ArrayList<File> files) {
         files.forEach(oldFile -> {

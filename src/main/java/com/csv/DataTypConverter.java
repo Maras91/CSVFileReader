@@ -11,21 +11,23 @@ import java.util.stream.IntStream;
 
 public class DataTypConverter {
 
-    private List<Map<String, Object>> listOfLines;
+    private List<ReadFile> listOfFiles;
 
     public DataTypConverter() throws IOException {
         FileList fileList = new FileList();
-        listOfLines = new ArrayList<>();
+        listOfFiles = new ArrayList<>();
         fileList.getFileList().forEach(file -> {
+            ReadFile readFile = new ReadFile(file.getFileName().toString());
             List<List<String>> columns = extractColumns(file);
             List<DataType> columnTypes = columns.stream()
                     .map(this::resolveDataType).collect(Collectors.toList());
             List<String> lines = removeHeader(readLines(file));
             lines.forEach(line-> {
-                listOfLines.add(new HashMap<>());
+                readFile.addRow();
                 String[] fields = line.split(",");
-                IntStream.range(0,columnTypes.size()).forEach(i -> listOfLines.get(listOfLines.size()-1).put(fields[i],columnTypes.get(i)));
+                IntStream.range(0,columnTypes.size()).forEach(i -> readFile.getRow(readFile.getData().size()-1).putField(fields[i],columnTypes.get(i)));
             });
+            listOfFiles.add(readFile);
         });
         System.out.println();
     }
@@ -76,8 +78,8 @@ public class DataTypConverter {
         return new ArrayList<>();
     }
 
-    public List<Map<String, Object>> getListOfLines() {
-        return listOfLines;
+    public List<ReadFile> getListOfFiles() {
+        return listOfFiles;
     }
 
 }
