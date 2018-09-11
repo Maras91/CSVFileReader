@@ -1,4 +1,4 @@
-package com.csv;
+package com.csv.enums;
 
 public enum Extension {
     csv, tsv;
