@@ -1,6 +1,8 @@
 package com.csv;
 
 import com.csv.enums.DataType;
+import com.csv.file.logic.Field;
+import com.csv.file.logic.CSVFile;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -11,26 +13,29 @@ import java.util.stream.IntStream;
 
 public class DataTypConverter {
 
-    private List<ReadFile> listOfFiles;
+    private List<CSVFile> listOfFiles;
 
     public DataTypConverter() throws IOException {
         FileList fileList = new FileList();
         listOfFiles = new ArrayList<>();
         fileList.getFileList().forEach(file -> {
-            ReadFile readFile = new ReadFile(file.getFileName().toString());
+            CSVFile CSVFile = new CSVFile(file.getFileName().toString());
+            List<String> columnNames = getFirstLine(file);
             List<List<String>> columns = extractColumns(file);
             List<DataType> columnTypes = columns.stream()
                     .map(this::resolveDataType).collect(Collectors.toList());
             List<String> lines = removeHeader(readLines(file));
             lines.forEach(line-> {
-                readFile.addRow();
+                CSVFile.addRow();
                 String[] fields = line.split(",");
-                IntStream.range(0,columnTypes.size()).forEach(i -> readFile.getRow(readFile.getData().size()-1).putField(fields[i],columnTypes.get(i)));
+                IntStream.range(0,columnTypes.size()).forEach(i -> CSVFile.getRow(CSVFile.getData().size()-1).addField(new Field(fields[i],columnTypes.get(i),columnNames.get(i))));
             });
-            listOfFiles.add(readFile);
+            listOfFiles.add(CSVFile);
         });
         System.out.println();
     }
+
+
 
     private List<List<String>> extractColumns(Path file) {
         List<String> lines = removeHeader(readLines(file));
@@ -78,7 +83,16 @@ public class DataTypConverter {
         return new ArrayList<>();
     }
 
-    public List<ReadFile> getListOfFiles() {
+    private List<String> getFirstLine(Path path) {
+        try {
+            return new ArrayList<> (Arrays.asList(Files.lines(path).findFirst().toString().split(",")));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public List<CSVFile> getListOfFiles() {
         return listOfFiles;
     }
 

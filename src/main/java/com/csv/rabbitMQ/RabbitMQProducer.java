@@ -1,5 +1,10 @@
-package com.csv;
+package com.csv.rabbitMQ;
 
+import com.csv.DataTypConverter;
+import com.csv.JSONConverter;
+import com.csv.Properties;
+import com.csv.file.logic.CSVFile;
+import com.csv.file.logic.Row;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
@@ -14,18 +19,21 @@ public class RabbitMQProducer {
     public static void startScanning() throws java.io.IOException {
 
      //   FileToRabbitMQMessagesConverter messages = new FileToRabbitMQMessagesConverter();
-        DataTypConverter listOfFiles= new DataTypConverter();
+     //   DataTypConverter listOfFiles= new DataTypConverter();
+        JSONConverter data = new JSONConverter();
+        data.convertToJSON();
+
         try {
             ConnectionFactory factory = new ConnectionFactory();
             factory.setHost(Properties.rabbitMQHost);
             Connection connection = factory.newConnection();
             Channel channel = connection.createChannel();
 
-            for (ReadFile file : listOfFiles.getListOfFiles()) {
-                for (Row row:file.getData()) {
-                    channel.queueDeclare(file.getId(), false, false, false, null);
-                    channel.basicPublish("", file.getId(), null, row.getFields().toString().getBytes());
-                    System.out.println(" [x] Sent '" + file.getId() + "':'" + row.getFields().toString() + "'");
+            for (RMQDataPackage pack: data.getOutPutPackage()) {
+                for (JSONObject json: pack.getData()) {
+                    channel.queueDeclare(pack.getNameFile(), false, false, false, null);
+                    channel.basicPublish("", pack.getNameFile(), null, json.toString().getBytes());
+                    System.out.println(" [x] Sent '" + pack.getNameFile() + "':'" + json.toString() + "'");
                 }
             }
             channel.close();

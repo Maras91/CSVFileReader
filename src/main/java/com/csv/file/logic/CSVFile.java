@@ -1,14 +1,14 @@
-package com.csv;
+package com.csv.file.logic;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ReadFile {
+public class CSVFile {
 
     private String id;
     private List<Row> data;
 
-    ReadFile(String id) {
+    public CSVFile(String id) {
         this.id=id;
         data = new ArrayList<>();
     }

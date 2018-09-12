@@ -1,5 +1,7 @@
 package com.csv;
 
+import com.csv.enums.DataType;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -29,11 +31,11 @@ public class FileList {
 //        }
 //        return folderList;
 //    }
-//    public ArrayList<ReadFile> folderListToFileList(ArrayList<String> listOfFolders) {
-//        //ArrayList<String> listOfFolders -> ArrayList<ReadFile>
-//        ArrayList<ReadFile> fileList = new ArrayList<>();
+//    public ArrayList<CSVFile> folderListToFileList(ArrayList<String> listOfFolders) {
+//        //ArrayList<String> listOfFolders -> ArrayList<CSVFile>
+//        ArrayList<CSVFile> fileList = new ArrayList<>();
 //        listOfFolders.forEach(directory ->
-//                fileList.addAll(FileUtils.listFiles(new ReadFile(directory), new SuffixFileFilter(Properties.extension.toString()), TrueFileFilter.INSTANCE))
+//                fileList.addAll(FileUtils.listFiles(new CSVFile(directory), new SuffixFileFilter(Properties.extension.toString()), TrueFileFilter.INSTANCE))
 //        );
 //        return fileList;
 //    }
