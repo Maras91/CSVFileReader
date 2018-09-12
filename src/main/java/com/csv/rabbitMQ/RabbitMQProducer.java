@@ -1,10 +1,7 @@
 package com.csv.rabbitMQ;
 
-import com.csv.DataTypConverter;
-import com.csv.JSONConverter;
+import com.csv.converters.JSONConverter;
 import com.csv.Properties;
-import com.csv.file.logic.CSVFile;
-import com.csv.file.logic.Row;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
@@ -18,7 +15,7 @@ public class RabbitMQProducer {
 
     public static void startScanning() throws java.io.IOException {
 
-     //   FileToRabbitMQMessagesConverter messages = new FileToRabbitMQMessagesConverter();
+     //   AddExtensionComplete messages = new AddExtensionComplete();
      //   DataTypConverter listOfFiles= new DataTypConverter();
         JSONConverter data = new JSONConverter();
         data.convertToJSON();

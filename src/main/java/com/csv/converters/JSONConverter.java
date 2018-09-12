@@ -1,8 +1,10 @@
-package com.csv;
+package com.csv.converters;
 
-import com.csv.enums.DataType;
+import com.csv.Properties;
+import com.csv.converters.DataTypConverter;
 import com.csv.file.logic.Row;
 import com.csv.rabbitMQ.RMQDataPackage;
+import com.google.gson.Gson;
 import org.json.JSONObject;
 
 import java.io.IOException;
@@ -29,9 +31,7 @@ public class JSONConverter {
         {
             int countOfMessageLines = 0;
             for (Row line :file.getData()) {
-                line.getFields().forEach(field -> {
-                    newLine.put(field.getColumnName(), field.getData());
-                });
+                line.getFields().forEach(field -> newLine.put(field.getColumnName(), field.getDataType().convertData(field.getData())));
                 JSONObject json = new JSONObject(newLine);
                 jsonList.add(json);
                 countOfMessageLines++;

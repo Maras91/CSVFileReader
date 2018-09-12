@@ -1,22 +1,22 @@
 package com.csv.enums;
 
 public enum DataType implements DataConverter {
-    INTEGER {
+    LONG {
         @Override
         public Object convertData(String data) {
-            return Integer.parseInt(data);
+            return Long.valueOf(data);
         }
     },
     DOUBLE {
         @Override
         public Object convertData(String data) {
-            return Double.parseDouble(data);
+            return Double.valueOf(data);
         }
     },
     BOOL {
         @Override
         public Object convertData(String data) {
-            return Boolean.parseBoolean(data);
+            return Boolean.valueOf(data);
         }
     },
     STRING {

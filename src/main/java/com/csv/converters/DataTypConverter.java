@@ -1,8 +1,9 @@
-package com.csv;
+package com.csv.converters;
 
 import com.csv.enums.DataType;
 import com.csv.file.logic.Field;
 import com.csv.file.logic.CSVFile;
+import com.csv.file.logic.FileList;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -54,7 +55,7 @@ public class DataTypConverter {
     }
 
     private DataType resolveDataType(List<String> column) {
-        DataType dataType = DataType.INTEGER;
+        DataType dataType = DataType.LONG;
         for (String row : column) {
             if (!row.matches("[0-9]+")) {
                 dataType = DataType.DOUBLE;
@@ -85,7 +86,7 @@ public class DataTypConverter {
 
     private List<String> getFirstLine(Path path) {
         try {
-            return new ArrayList<> (Arrays.asList(Files.lines(path).findFirst().toString().split(",")));
+            return new ArrayList<> (Arrays.asList(Files.lines(path).findFirst().get().split(",")));
         } catch (IOException e) {
             e.printStackTrace();
         }
