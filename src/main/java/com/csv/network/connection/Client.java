@@ -1,4 +1,4 @@
-package com.csv;
+package com.csv.network.connection;
 
 import java.io.BufferedReader;
 import java.io.IOException;

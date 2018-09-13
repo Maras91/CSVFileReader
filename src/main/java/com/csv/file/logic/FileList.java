@@ -1,7 +1,6 @@
 package com.csv.file.logic;
 
 import com.csv.Properties;
-import com.csv.enums.DataType;
 
 import java.io.IOException;
 import java.nio.file.Files;
