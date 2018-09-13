@@ -7,7 +7,9 @@ import com.csv.rabbitMQ.RMQDataPackage;
 import com.google.gson.Gson;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -47,6 +49,7 @@ public class JSONConverter {
             }
         });
     }
+
     public List<RMQDataPackage> getOutPutPackage() {
         return outPutPackage;
     }

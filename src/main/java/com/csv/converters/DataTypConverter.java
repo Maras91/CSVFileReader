@@ -5,6 +5,7 @@ import com.csv.file.logic.Field;
 import com.csv.file.logic.CSVFile;
 import com.csv.file.logic.FileList;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -26,16 +27,16 @@ public class DataTypConverter {
             List<DataType> columnTypes = columns.stream()
                     .map(this::resolveDataType).collect(Collectors.toList());
             List<String> lines = removeHeader(readLines(file));
-            lines.forEach(line-> {
+            lines.forEach(line -> {
                 CSVFile.addRow();
                 String[] fields = line.split(",");
-                IntStream.range(0,columnTypes.size()).forEach(i -> CSVFile.getRow(CSVFile.getData().size()-1).addField(new Field(fields[i],columnTypes.get(i),columnNames.get(i))));
+                IntStream.range(0, columnTypes.size()).forEach(i -> CSVFile.getRow(CSVFile.getData().size() - 1).addField(new Field(fields[i], columnTypes.get(i), columnNames.get(i))));
             });
             listOfFiles.add(CSVFile);
+            changeFileName(file.toFile());
         });
         System.out.println();
     }
-
 
 
     private List<List<String>> extractColumns(Path file) {
@@ -59,9 +60,9 @@ public class DataTypConverter {
         for (String row : column) {
             if (!row.matches("[0-9]+")) {
                 dataType = DataType.DOUBLE;
-                if (!row.matches("(\\d+\\.\\d+)")){
+                if (!row.matches("(\\d+\\.\\d+)")) {
                     dataType = DataType.BOOL;
-                    if (!row.matches("^(false|true)$")){
+                    if (!row.matches("^(false|true)$")) {
                         dataType = DataType.STRING;
                     }
                 }
@@ -86,11 +87,20 @@ public class DataTypConverter {
 
     private List<String> getFirstLine(Path path) {
         try {
-            return new ArrayList<> (Arrays.asList(Files.lines(path).findFirst().get().split(",")));
+            return new ArrayList<>(Arrays.asList(Files.lines(path).findFirst().get().split(",")));
         } catch (IOException e) {
             e.printStackTrace();
         }
         return null;
+    }
+
+    private static void changeFileName(File oldFile) {
+        File newFile = new File(oldFile.getParent(), oldFile.getName() + ".added");
+        try {
+            Files.move(oldFile.toPath(), newFile.toPath());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public List<CSVFile> getListOfFiles() {
