@@ -1,31 +1,27 @@
 package com.csv.network.connection;
 
+import com.csv.converters.DataTypConverter;
 import com.csv.converters.JSONConverter;
 import com.csv.rabbitMQ.RMQDataPackage;
-import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.List;
 
-public class SendPackage {
+public class PackageSender {
 
-    public static void sendToServer(String ip, int port) {
-        try {
-            JSONConverter data = new JSONConverter();
-            data.convertToJSON();
+    public void sendToServer(String ip, int port, List<RMQDataPackage> data) {
 
             Client client = new Client();
             client.startConnection(ip, port);
             String message;
-            for (RMQDataPackage pack : data.getOutPutPackage()) {
+            for (RMQDataPackage pack : data) {
                 message = pack.getNameFile();
                 message +=("&&&");
                 message += pack.getData().toString();
                 client.sendMessage(message);
             }
-            String end = client.sendMessage(".");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+            client.sendMessage("end sending");
+
     }
 
 }

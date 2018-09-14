@@ -1,15 +1,12 @@
 package com.csv.converters;
 
 import com.csv.Properties;
-import com.csv.converters.DataTypConverter;
-import com.csv.file.logic.Row;
+import com.csv.file.CSVFile;
+import com.csv.file.Row;
 import com.csv.rabbitMQ.RMQDataPackage;
-import com.google.gson.Gson;
 import org.json.JSONObject;
 
-import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -17,19 +14,12 @@ import java.util.Map;
 
 public class JSONConverter {
 
-    private List<RMQDataPackage> outPutPackage;
-
-    public JSONConverter() {
-        this.outPutPackage = new ArrayList<>();
-    }
-
-    public void convertToJSON() throws IOException {
-
+    public List<RMQDataPackage> convertToJSON(List<CSVFile> listOfCSVFiles) throws IOException {
+        List<RMQDataPackage> outPutPackage = new ArrayList<>();
         List<JSONObject> jsonList = new ArrayList<>();
-        DataTypConverter listOfFiles = new DataTypConverter();
         Map<String, Object> newLine = new HashMap<>();
 
-        listOfFiles.getListOfFiles().forEach(file ->
+        listOfCSVFiles.forEach(file ->
         {
             int countOfMessageLines = 0;
             for (Row line :file.getData()) {
@@ -48,9 +38,6 @@ public class JSONConverter {
                 jsonList.clear();
             }
         });
-    }
-
-    public List<RMQDataPackage> getOutPutPackage() {
         return outPutPackage;
     }
 

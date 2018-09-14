@@ -1,4 +1,4 @@
-package com.csv.file.logic;
+package com.csv.file;
 
 import com.csv.enums.DataType;
 

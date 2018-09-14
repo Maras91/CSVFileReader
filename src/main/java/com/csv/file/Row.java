@@ -1,4 +1,6 @@
-package com.csv.file.logic;
+package com.csv.file;
+
+import com.csv.file.Field;
 
 import java.util.ArrayList;
 import java.util.List;

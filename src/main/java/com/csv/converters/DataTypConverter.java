@@ -1,9 +1,9 @@
 package com.csv.converters;
 
 import com.csv.enums.DataType;
-import com.csv.file.logic.Field;
-import com.csv.file.logic.CSVFile;
-import com.csv.file.logic.FileList;
+import com.csv.file.Field;
+import com.csv.file.CSVFile;
+import com.csv.file.FileList;
 
 import java.io.File;
 import java.io.IOException;
@@ -12,57 +12,62 @@ import java.nio.file.Path;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+import com.csv.Properties;
+import com.csv.file.FileListReader;
+
 
 public class DataTypConverter {
 
-    private List<CSVFile> listOfFiles;
+    private static final String integerPattern = "[0-9]+";
+    private static final String doublePattern = "(\\d+\\.\\d+)";
+    private static final String boolPattern = "^(false|true)$";
 
-    public DataTypConverter() throws IOException {
-        FileList fileList = new FileList();
-        listOfFiles = new ArrayList<>();
+    public List<CSVFile> converterDataType(FileList fileList) throws IOException {
+        // = new FileListReader().readFileList(Properties.fileWithListOfScanDirectories);
+        List<CSVFile> listOfFiles = new ArrayList<>();
         fileList.getFileList().forEach(file -> {
             CSVFile CSVFile = new CSVFile(file.getFileName().toString());
             List<String> columnNames = getFirstLine(file);
             List<List<String>> columns = extractColumns(file);
             List<DataType> columnTypes = columns.stream()
-                    .map(this::resolveDataType).collect(Collectors.toList());
+                    .map(DataTypConverter::resolveDataType).collect(Collectors.toList());
             List<String> lines = removeHeader(readLines(file));
             lines.forEach(line -> {
                 CSVFile.addRow();
-                String[] fields = line.split(",");
+                String[] fields = line.split(Properties.extension.getSeparator());
                 IntStream.range(0, columnTypes.size()).forEach(i -> CSVFile.getRow(CSVFile.getData().size() - 1).addField(new Field(fields[i], columnTypes.get(i), columnNames.get(i))));
             });
             listOfFiles.add(CSVFile);
             changeFileName(file.toFile());
         });
-        System.out.println();
+        return listOfFiles;
     }
 
 
     private List<List<String>> extractColumns(Path file) {
         List<String> lines = removeHeader(readLines(file));
         List<List<String>> columns = new ArrayList<>();
-        int numberOfColumns = lines.get(0).split(",").length;
+        int numberOfColumns = lines.get(0).split(Properties.extension.getSeparator()).length;
         List<DataType> columnTypes = new ArrayList<>();
         IntStream.range(0, numberOfColumns).forEach(colNum -> {
             columns.add(new ArrayList<>());
             IntStream.range(0, lines.size()).forEach(lineNum -> {
                 columns.get(colNum).add(
-                        Arrays.stream(lines.get(lineNum).split(",")).collect(Collectors.toList()).get(colNum)
+                        Arrays.stream(lines.get(lineNum).split(Properties.extension.getSeparator())).collect(Collectors.toList()).get(colNum)
                 );
             });
         });
         return columns;
     }
 
-    private DataType resolveDataType(List<String> column) {
+    private static DataType resolveDataType(List<String> column) {
         DataType dataType = DataType.LONG;
         for (String row : column) {
-            if (!row.matches("[0-9]+")) {
+            if (!row.matches(integerPattern)) {
                 dataType = DataType.DOUBLE;
-                if (!row.matches("(\\d+\\.\\d+)")) {
+                if (!row.matches(doublePattern)) {
                     dataType = DataType.BOOL;
-                    if (!row.matches("^(false|true)$")) {
+                    if (!row.matches(boolPattern)) {
                         dataType = DataType.STRING;
                     }
                 }
@@ -85,9 +90,9 @@ public class DataTypConverter {
         return new ArrayList<>();
     }
 
-    private List<String> getFirstLine(Path path) {
+    private static List<String> getFirstLine(Path path) {
         try {
-            return new ArrayList<>(Arrays.asList(Files.lines(path).findFirst().get().split(",")));
+            return new ArrayList<>(Arrays.asList(Files.lines(path).findFirst().get().split(Properties.extension.getSeparator())));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -101,10 +106,6 @@ public class DataTypConverter {
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    public List<CSVFile> getListOfFiles() {
-        return listOfFiles;
     }
 
 }
