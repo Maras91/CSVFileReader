@@ -1,6 +1,7 @@
 package com.csv.file;
 
 import com.csv.enums.DataType;
+import org.springframework.context.annotation.Bean;
 
 public class Field {
     private String data;

@@ -14,7 +14,7 @@ import java.util.Map;
 
 public class JSONConverter {
 
-    public List<RMQDataPackage> convertToJSON(List<CSVFile> listOfCSVFiles) throws IOException {
+    public List<RMQDataPackage> convertToJSON(List<CSVFile> listOfCSVFiles ,int messageSize) {
         List<RMQDataPackage> outPutPackage = new ArrayList<>();
         List<JSONObject> jsonList = new ArrayList<>();
         Map<String, Object> newLine = new HashMap<>();
@@ -27,7 +27,7 @@ public class JSONConverter {
                 JSONObject json = new JSONObject(newLine);
                 jsonList.add(json);
                 countOfMessageLines++;
-                if (countOfMessageLines >= Properties.rabbitMQMessageSize) {
+                if (countOfMessageLines >= messageSize) {
                     countOfMessageLines = 0;
                     outPutPackage.add(new RMQDataPackage(file.getId(), new ArrayList<>(jsonList)));
                     jsonList.clear();

@@ -1,10 +1,8 @@
-package com.csv.network.connection;
+package com.csv.network;
 
-import com.csv.converters.DataTypConverter;
-import com.csv.converters.JSONConverter;
+import com.csv.network.Client;
 import com.csv.rabbitMQ.RMQDataPackage;
 
-import java.io.IOException;
 import java.util.List;
 
 public class PackageSender {

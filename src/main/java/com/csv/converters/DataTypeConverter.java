@@ -13,24 +13,22 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import com.csv.Properties;
-import com.csv.file.FileListReader;
 
 
-public class DataTypConverter {
+public class DataTypeConverter {
 
     private static final String integerPattern = "[0-9]+";
     private static final String doublePattern = "(\\d+\\.\\d+)";
     private static final String boolPattern = "^(false|true)$";
 
-    public List<CSVFile> converterDataType(FileList fileList) throws IOException {
-        // = new FileListReader().readFileList(Properties.fileWithListOfScanDirectories);
+    public List<CSVFile> converterDataType(FileList fileList) {
         List<CSVFile> listOfFiles = new ArrayList<>();
         fileList.getFileList().forEach(file -> {
             CSVFile CSVFile = new CSVFile(file.getFileName().toString());
             List<String> columnNames = getFirstLine(file);
             List<List<String>> columns = extractColumns(file);
             List<DataType> columnTypes = columns.stream()
-                    .map(DataTypConverter::resolveDataType).collect(Collectors.toList());
+                    .map(DataTypeConverter::resolveDataType).collect(Collectors.toList());
             List<String> lines = removeHeader(readLines(file));
             lines.forEach(line -> {
                 CSVFile.addRow();

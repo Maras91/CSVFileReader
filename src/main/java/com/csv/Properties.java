@@ -8,7 +8,6 @@ public class Properties {
     public final static Extension extension = Extension.CSV;
     public final static Integer scanningFrequencyInSeconds = 8;
 //    public final static String rabbitMQHost = "localhost";
-//    public final static String EXCHANGE_NAME = "message";
 
     private Properties() {}
 }
